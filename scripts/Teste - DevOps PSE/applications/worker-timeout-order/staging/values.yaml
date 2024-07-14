@@ -1,0 +1,49 @@
+# Updated automatically at 2024-06-20T22:38:24.070Z
+replicaCount: 1
+image:
+  repository: igrowdigital/chatbot-back
+  pullPolicy: IfNotPresent
+  tag: "stag.develop.89ea4aef"
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+suspend: false
+serviceAccount:
+  create: false
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: false
+# interNodeAntiAffinityEnabled: true
+probes:
+  enabled: false
+autoscaling:
+  enabled: false
+env:
+  PLATFORM: kubernetes
+  COUNT_TIC_DENIED_ORDER_AUTOMATIC: "10"
+  DISABLE_INTEGRATION_EMIT: "true"
+  USE_KANBAN_DB: "true"
+nodeSelector: {}
+tolerations: []
+affinity: {}
+serviceMonitor:
+  enabled: false
+  namespace: monitoring
+command:
+  - node
+  - worker-timeout-order.js
+resources:
+  limits:
+    cpu: 100m
+    memory: 512Mi
+  requests:
+    cpu: 10m
+    memory: 128Mi
+ports:
+  - name: http
+    containerPort: 4000
+    protocol: TCP

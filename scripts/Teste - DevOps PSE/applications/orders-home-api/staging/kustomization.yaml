@@ -1,0 +1,10 @@
+# Updated by tools/app-2.1.0-mass-update.js on 2023-08-01T18:17:05.898Z
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+helmCharts:
+- name: app
+  version: 2.1.0
+  repo: http://chartmuseum-private.chartmuseum-private.svc.cluster.local:8080/
+  valuesFile: values.yaml
+  namespace: orders-home-api
+  releaseName: orders-home-api

@@ -1,0 +1,86 @@
+# Updated automatically at 2024-06-20T22:37:59.485Z
+replicaCount: 1
+image:
+  repository: igrowdigital/admin-front
+  pullPolicy: IfNotPresent
+  tag: "stag.feature_CDC20-5433-table-checkout-by-items.a5c39f29"
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: selfsigned
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    external-dns.alpha.kubernetes.io/hostname: staging-admin-front.anota-ai.com
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+  hosts:
+    - host: staging-admin-front.anota-ai.com
+      paths:
+        - path: /
+    - host: staging-bot-mobile.anota-ai.com
+      paths:
+        - path: /
+  tls:
+    - secretName: staging-admin-front.anota-ai.com
+      hosts:
+        - staging-admin-front.anota-ai.com
+        - staging-bot-mobile.anota-ai.com
+probes:
+  enabled: false
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 5
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 5
+serviceMonitor:
+  enabled: false
+  namespace: monitoring
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 1
+  triggers:
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "200"
+env:
+  PLATFORM: kubernetes
+nodeSelector: {}
+tolerations: []
+affinity: {}
+redis:
+  install: false
+resources:
+  limits:
+    cpu: 100m
+    memory: 512Mi
+  requests:
+    cpu: 10m
+    memory: 128Mi
+ports:
+  - name: http
+    containerPort: 80
+    protocol: TCP
+  - name: metrics
+    containerPort: 8080
+    protocol: TCP

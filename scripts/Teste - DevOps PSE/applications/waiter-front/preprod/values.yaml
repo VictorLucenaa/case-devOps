@@ -1,0 +1,57 @@
+# Updated automatically at 2024-06-20T22:38:24.174Z
+replicaCount: 1
+image:
+  repository: igrowdigital/waiter-front
+  pullPolicy: IfNotPresent
+  tag: "prep.release_01-07-24.1715fecc"
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+affinity: {}
+serviceAccount:
+  create: false
+podDisruptionBudget:
+  enabled: false
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: selfsigned
+    external-dns.alpha.kubernetes.io/hostname: preprod-waiter-front.anota-ai.com
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+  hosts:
+    - host: preprod-waiter-front.anota-ai.com
+      paths:
+        - path: /
+  tls:
+    - secretName: preprod-waiter-front.anota-ai.com
+      hosts:
+        - preprod-waiter-front.anota-ai.com
+probes:
+  enabled: false
+serviceMonitor:
+  enabled: false
+autoscaling:
+  enabled: false
+env:
+  PLATFORM: kubernetes
+  NODE_ENV: preprod
+nodeSelector: {}
+tolerations: []
+affinity: {}
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 10m
+    memory: 64Mi
+ports:
+  - name: http
+    containerPort: 80
+    protocol: TCP

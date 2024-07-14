@@ -1,0 +1,73 @@
+# Updated automatically at 2024-06-20T22:37:59.453Z
+replicaCount: 1
+image:
+  repository: igrowdigital/orders-home-api
+  pullPolicy: IfNotPresent
+  tag: commit-a7c3d737f
+ports:
+- name: http
+  protocol: TCP
+  containerPort: 3000
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: true
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: selfsigned
+    external-dns.alpha.kubernetes.io/hostname: staging-orders-home.anota-ai.com
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+  hosts:
+  - host: staging-orders-home.anota-ai.com
+    paths:
+    - path: /
+  tls:
+  - secretName: staging-orders-home.anota-ai.com
+    hosts:
+    - staging-orders-home.anota-ai.com
+probes:
+  enabled: true
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: http
+    initialDelaySeconds: 5
+  readinessProbe:
+    httpGet:
+      path: /healthz
+      port: http
+    initialDelaySeconds: 5
+autoscaling:
+  enabled: false
+env:
+  PLATFORM: kubernetes
+nodeSelector: {}
+tolerations: []
+interNodeAntiAffinityEnabled: true
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+resources:
+  limits:
+    cpu: 100m
+    memory: 512Mi
+  requests:
+    cpu: 10m
+    memory: 128Mi
+env:
+  PLATFORM: kubernetes
