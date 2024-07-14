@@ -1,0 +1,85 @@
+# Updated by tools/app-2.1.0-mass-update.js on 2023-08-01T18:17:05.253Z
+replicaCount: 1
+image:
+  repository: igrowdigital/reports
+  pullPolicy: IfNotPresent
+  tag: "stag.develop.60ef91a6"
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+podSecurityContext: {}
+probes:
+  enabled: false
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: http
+    initialDelaySeconds: 5
+  readinessProbe:
+    httpGet:
+      path: /healthz
+      port: http
+    initialDelaySeconds: 5
+securityContext:
+  readOnlyRootFilesystem: false
+  runAsNonRoot: false
+  runAsUser: 0
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    cert-manager.io/cluster-issuer: selfsigned
+    external-dns.alpha.kubernetes.io/hostname: staging-reports.anota-ai.com
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+  hosts:
+    - host: staging-reports.anota-ai.com
+      paths:
+        - path: /
+  tls:
+    - secretName: staging-reports.anota-ai.com
+      hosts:
+        - staging-reports.anota-ai.com
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 200
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+env:
+  PLATFORM: kubernetes
+  PORT: "5000"
+nodeSelector: {}
+tolerations: []
+interNodeAntiAffinityEnabled: true
+redis:
+  install: false
+secretEnvs:
+  enabled: true
+  template:
+    type: Opaque
+    data:
+      ROOT_AUTH_KEY: '{{ .jwt_keys_root_auth_key }}'
+  dataFrom:
+    - extract:
+        key: jwt_keys
+resources:
+  limits:
+    cpu: 500m
+    memory: 1024Mi
+  requests:
+    cpu: 100m
+    memory: 512Mi
+ports:
+  - name: http
+    containerPort: 5000
+    protocol: TCP

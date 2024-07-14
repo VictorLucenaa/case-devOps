@@ -1,0 +1,81 @@
+# Updated automatically at 2024-06-20T22:38:24.322Z
+replicaCount: 1
+image:
+  repository: igrowdigital/payments-status-api
+  pullPolicy: IfNotPresent
+  tag: "stag.develop.bcf72e30"
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+podSecurityContext: {}
+securityContext: {}
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: selfsigned
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-headers: Content-Type,Authorization,X-Anota-Page-Id,X-Anota-User-Id,X-Anota-Session-Id,X-Anota-Url
+  hosts:
+    - host: api.anota-ai.com
+      paths:
+        - path: /payments-service/status(/|$)(.*)
+probes:
+  enabled: true
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: http
+    initialDelaySeconds: 5
+  readinessProbe:
+    httpGet:
+      path: /healthz
+      port: http
+    initialDelaySeconds: 5
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 1
+  triggers:
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "200"
+env:
+  IS_PIX_ACTIVE: "true"
+nodeSelector: {}
+tolerations: []
+affinity: {}
+redis:
+  install: false
+command:
+  - node
+  - app.js
+resources:
+  limits:
+    cpu: 100m
+    memory: 512Mi
+  requests:
+    cpu: 10m
+    memory: 128Mi
+ports:
+  - name: http
+    containerPort: 1232
+    protocol: TCP
+suspend: false

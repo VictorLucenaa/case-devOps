@@ -1,0 +1,80 @@
+# Updated automatically at 2024-06-20T22:38:24.223Z
+replicaCount: 1
+image:
+  repository: igrowdigital/root
+  pullPolicy: IfNotPresent
+  tag: "stag.develop.d1febd01"
+interNodeAntiAffinityEnabled: true
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: selfsigned
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    external-dns.alpha.kubernetes.io/hostname: staging-root.anota-ai.com
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+  hosts:
+    - host: staging-root.anota-ai.com
+      paths:
+        - path: /
+  tls:
+    - secretName: staging-root.anota-ai.com
+      hosts:
+        - staging-root.anota-ai.com
+probes:
+  enabled: false
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: http
+    initialDelaySeconds: 5
+  readinessProbe:
+    httpGet:
+      path: /healthz
+      port: http
+    initialDelaySeconds: 5
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 1
+  triggers:
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "200"
+nodeSelector: {}
+tolerations: []
+affinity: {}
+redis:
+  install: false
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+interNodeAntiAffinityEnabled: true
+command: []
+resources:
+  limits:
+    cpu: 100m
+    memory: 512Mi
+  requests:
+    cpu: 10m
+    memory: 128Mi
+ports:
+  - name: http
+    containerPort: 7000
+    protocol: TCP

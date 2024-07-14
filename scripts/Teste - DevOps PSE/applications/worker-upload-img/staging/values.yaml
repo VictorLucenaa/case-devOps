@@ -1,0 +1,79 @@
+# Updated automatically at 2024-06-20T22:38:23.883Z
+replicaCount: 1
+image:
+  repository: igrowdigital/worker-upload-img
+  pullPolicy: IfNotPresent
+  tag: commit-9fda70793
+containerPort: 3333
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 2
+podSecurityContext: {}
+suspend: false
+securityContext: {}
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: false
+interNodeAntiAffinityEnabled: true
+probes:
+  enabled: false
+autoscaling:
+  enabled: false
+  minReplicas: 0
+  maxReplicas: 4
+  triggers:
+  - type: rabbitmq
+    metadata:
+      queueLength: "20"
+      queueName: image-update
+      hostFromEnv: AMAZON_MQ_URL
+secretEnvs:
+  enabled: true
+  template:
+    type: Opaque
+    data:
+      AMAZON_MQ_URL: amqps://{{ .mq_main_username }}:{{ .mq_main_password }}@{{
+        .mq_main_hostname }}:5671
+  dataFrom:
+  - extract:
+      key: mq_main
+env:
+nodeSelector: {}
+tolerations: []
+affinity: {}
+serviceMonitor:
+  enabled: false
+  namespace: monitoring
+redisConfig:
+  envKey: REDIS_URL
+redis:
+  install: false
+  architecture: standalone
+  master:
+    disableCommands: null
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: monitoring
+  cluster:
+    enabled: false
+  auth:
+    password: CHANGEME
+command: []
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi

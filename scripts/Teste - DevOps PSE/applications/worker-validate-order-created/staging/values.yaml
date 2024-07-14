@@ -1,0 +1,57 @@
+# Updated automatically at 2024-06-20T22:38:24.504Z
+replicaCount: 1
+image:
+  repository: igrowdigital/chatbot-back
+  pullPolicy: IfNotPresent
+  tag: "stag.develop.89ea4aef"
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 2
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: false
+probes:
+  enabled: false
+autoscaling:
+  enabled: false
+env:
+  K8S_POD_NAMESPACE: worker-validate-order-created
+  USE_ORDER_API: "true"
+  USE_ORDER_INSERT_API: "true"
+  NEW_VALIDATE_ORDER: "true"
+  DISABLE_FOODY_DELIVERY: "true"
+  USE_CLIENT_API: "true"
+nodeSelector: {}
+tolerations: []
+affinity: {}
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+command:
+  - node
+  - worker-validate-order-created.js
+resources:
+  limits:
+    cpu: 100m
+    memory: 512Mi
+  requests:
+    cpu: 10m
+    memory: 128Mi
+ports:
+  - name: http
+    containerPort: 2000
+    protocol: TCP
+  - name: metrics
+    containerPort: 8080
+    protocol: TCP

@@ -1,0 +1,47 @@
+# Updated automatically at 2024-06-20T22:38:23.955Z
+replicaCount: 1
+image:
+  repository: igrowdigital/notification-order-service
+  pullPolicy: IfNotPresent
+  tag: "stag.develop.b5dee75f"
+suspend: false
+imagePullSecrets: []
+affinity: {}
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: ClusterIP
+  port: 8001
+ingress:
+  enabled: false
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 100
+env: null
+nodeSelector: {}
+tolerations: []
+affinity: {}
+redis:
+  install: false
+resources:
+  limits:
+    cpu: 100m
+    memory: 512Mi
+  requests:
+    cpu: 10m
+    memory: 128Mi
+ports:
+  - name: http
+    containerPort: 8001
+    protocol: TCP
