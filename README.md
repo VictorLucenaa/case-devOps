@@ -72,6 +72,7 @@ cd endereço_do_seu_repositório
 <p>A raiz da sua pasta deve estar assim:</p>
 
 ```
+case-devOps
 ├── desafio 1 - pratico
 │   ├── adicionar.py
 │   ├── remover.py
@@ -96,7 +97,7 @@ cd endereço_do_seu_repositório
 <p>Navegue até a pasta desafio 1 - pratico:</p>
 
 ```bash
-cd desafio 1 - pratico
+cd case-devOps/desafio 1 - pratico
 ```
 
 <h2> Executando adicionar.py </h2>
