@@ -99,6 +99,8 @@ cd endereço_do_seu_repositório
 cd desafio 1 - pratico
 ```
 
+<h2> Executando adicionar.py </h2>
+
 <p>Para executar o script adicionar.py em modo de simulação (dry-run), use o seguinte comando:</p>
 
 ```bash
@@ -114,6 +116,8 @@ python adicionar.py
 ```
 
 <p>Isso irá aplicar as modificações aos arquivos YAML encontrados no diretório atual e suas subpastas.</p>
+
+<h2> Executando remover.py </h2>
 
 <p>Para executar o script remover.py em modo de simulação (dry-run), use o seguinte comando:</p>
 
