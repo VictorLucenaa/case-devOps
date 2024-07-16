@@ -31,12 +31,13 @@ def update_kustomization_version(file_path, yaml_data):
                 chart['version'] = '2.2.1'
                 modified = True
     if modified:
-        with open(file_path, 'w') as file:
-            yaml.dump(yaml_data, file, default_flow_style=False, sort_keys=True)
         with open('logs_de_adicao.txt', 'a') as log_file:
             timestamp = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
             log_file.write(f"\n[{timestamp}] - Modificações realizadas no arquivo: {file_path}\n")
             log_file.write("- Atualizado o valor de 'version' na configuração 'helmCharts' para '2.2.1'\n")
+    if not args.dry_run:
+        with open(file_path, 'w') as file:
+            yaml.dump(yaml_data, file, default_flow_style=False, sort_keys=True)
     return modified
 
 # Função que atualiza as propriedades da configuração "ports"
